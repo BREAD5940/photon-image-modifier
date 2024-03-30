@@ -20,6 +20,9 @@ sed -i 's/# AllowedCPUs=4-7/AllowedCPUs=4-7/g' install.sh
 ./install.sh
 rm install.sh
 
+# Changing default shell
+echo "Setting default shell to bash for user pi"
+chsh -s $(which bash) pi
 
 # Remove extra packages 
 echo "Purging extra things"
@@ -30,9 +33,23 @@ apt-get autoremove -y
 
 echo "Installing additional things"
 sudo apt-get update
-apt-get install -y network-manager net-tools libatomic1
+apt-get install -y network-manager net-tools libatomic1 linuxptp v4l-utils
 # mrcal stuff
 apt-get install -y libcholmod3 liblapack3 libsuitesparseconfig5
+
+# See default options and info:
+# https://github.com/richardcochran/linuxptp/blob/v3.1.1/configs/default.cfg
+# https://github.com/richardcochran/linuxptp/blob/v3.1.1/ptp4l.8
+echo "Setting up linuxptp as a service"
+# Changing some configurations
+sed -i '/^slaveOnly.*/c\slaveOnly               1' /etc/linuxptp/ptp4l.conf
+sed -i '/^clock_servo.*/c\clock_servo             linreg' /etc/linuxptp/ptp4l.conf
+sed -i '/^logging_level.*/c\logging_level           7' /etc/linuxptp/ptp4l.conf
+sed -i '/^delay_mechanism.*/c\delay_mechanism         Auto' /etc/linuxptp/ptp4l.conf
+sed -i '/^time_stamping.*/c\time_stamping           software' /etc/linuxptp/ptp4l.conf
+# Start and enable the service so it always runs
+systemctl start ptp4l@eth0.service
+systemctl enable ptp4l@eth0.service
 
 cat > /etc/netplan/00-default-nm-renderer.yaml <<EOF
 network:
