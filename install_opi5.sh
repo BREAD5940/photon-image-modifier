@@ -48,8 +48,14 @@ sed -i '/^logging_level.*/c\logging_level           7' /etc/linuxptp/ptp4l.conf
 sed -i '/^delay_mechanism.*/c\delay_mechanism         Auto' /etc/linuxptp/ptp4l.conf
 sed -i '/^time_stamping.*/c\time_stamping           software' /etc/linuxptp/ptp4l.conf
 # Start and enable the service so it always runs
-systemctl start ptp4l@eth0.service
 systemctl enable ptp4l@eth0.service
+
+# Fix up phc2sys service
+sed -i '/^Requires=.*/c\Requires=ptp4l@%I.service' /lib/systemd/system/phc2sys@.service
+sed -i '/^After=.*/c\After=ptp4l@%I.service' /lib/systemd/system/phc2sys@.service
+sed -i '/^ExecStart=.*/c\ExecStart=/usr/sbin/phc2sys -l 7 -w -s %I -r' /lib/systemd/system/phc2sys@.service
+# Start and enable the service so it always runs
+systemctl enable phc2sys@eth0.service
 
 cat > /etc/netplan/00-default-nm-renderer.yaml <<EOF
 network:
