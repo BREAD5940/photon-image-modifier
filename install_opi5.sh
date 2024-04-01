@@ -47,7 +47,9 @@ sed -i '/^clock_servo.*/c\clock_servo             linreg' /etc/linuxptp/ptp4l.co
 sed -i '/^logging_level.*/c\logging_level           7' /etc/linuxptp/ptp4l.conf
 sed -i '/^delay_mechanism.*/c\delay_mechanism         Auto' /etc/linuxptp/ptp4l.conf
 sed -i '/^time_stamping.*/c\time_stamping           software' /etc/linuxptp/ptp4l.conf
-sed -i '/^step_threshold.*/c\step_threshold          0.000002' /etc/linuxptp/ptp4l.conf
+sed -i '/^step_threshold.*/c\step_threshold          0.00002' /etc/linuxptp/ptp4l.conf
+# Fix up ptp4l service
+sed -i '/^ExecStart=.*/c\ExecStart=/bin/bash -c '\''/usr/bin/sleep 15 && /usr/sbin/ptp4l -f /etc/linuxptp/ptp4l.conf -i %I'\''' /lib/systemd/system/ptp4l@.service
 # Start and enable the service so it always runs
 systemctl enable ptp4l@eth0.service
 # Disable timesync cause we're using PTP
