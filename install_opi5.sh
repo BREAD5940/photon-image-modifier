@@ -53,7 +53,13 @@ systemctl enable ptp4l@eth0.service
 # Fix up phc2sys service
 sed -i '/^Requires=.*/c\Requires=ptp4l@%I.service' /lib/systemd/system/phc2sys@.service
 sed -i '/^After=.*/c\After=ptp4l@%I.service' /lib/systemd/system/phc2sys@.service
-sed -i '/^ExecStart=.*/c\ExecStart=/usr/sbin/phc2sys -l 7 -w -s %I -r' /lib/systemd/system/phc2sys@.service
+# sed -i '/^ExecStart=.*/c\ExecStart=/usr/sbin/phc2sys -l 7 -w -s %I -r' /lib/systemd/system/phc2sys@.service
+sed -i '/^ExecStart=.*/{c\
+ExecStart=/usr/sbin/phc2sys -l 7 -w -s %I -r\
+Restart=always\
+StartLimitInterval=0\
+RestartSec=5\
+}'
 # Start and enable the service so it always runs
 systemctl enable phc2sys@eth0.service
 
