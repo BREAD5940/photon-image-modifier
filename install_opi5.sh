@@ -50,6 +50,8 @@ sed -i '/^time_stamping.*/c\time_stamping           software' /etc/linuxptp/ptp4
 sed -i '/^step_threshold.*/c\step_threshold          0.000002' /etc/linuxptp/ptp4l.conf
 # Start and enable the service so it always runs
 systemctl enable ptp4l@eth0.service
+# Disable timesync cause we're using PTP
+systemctl disable systemd-timesyncd.service 
 
 # Fix up phc2sys service
 # sed -i '/^Requires=.*/c\Requires=ptp4l@%I.service' /lib/systemd/system/phc2sys@.service
