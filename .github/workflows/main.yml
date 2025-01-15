@@ -1,11 +1,12 @@
-name: Build driver
+name: Build real driver
 on:
   push:
-    branches: [ main ]
+    branches: [ real ]
     tags:
       - 'v*'
   pull_request:
-    branches: [ main ]
+    branches: [ real ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -51,6 +52,15 @@ jobs:
           - name: rock5c
             script: ./install_opi5.sh
             base_image: https://github.com/Joshua-Riek/ubuntu-rockchip/releases/download/v2.4.0/ubuntu-24.04-preinstalled-server-arm64-rock-5c.img.xz
+          - name: zero3josh
+            script: ./install_opi5.sh
+            base_image: https://github.com/Joshua-Riek/ubuntu-rockchip/releases/download/v2.4.0/ubuntu-22.04-preinstalled-server-arm64-radxa-zero3.img.xz
+          - name: armbian_minimal_debian
+            script: ./install_opi5.sh
+            base_image: https://github.com/armbian/community/releases/download/25.2.0-trunk.293/Armbian_community_25.2.0-trunk.293_Radxa-zero3_bookworm_vendor_6.1.84_minimal.img.xz
+          - name: armbian_ubuntu
+            script: ./install_opi5.sh
+            base_image: https://github.com/armbian/community/releases/download/25.2.0-trunk.293/Armbian_community_25.2.0-trunk.293_Radxa-zero3_noble_vendor_6.1.84_gnome_desktop.img.xz
             
     name: "Build for ${{ matrix.name }}"
 
@@ -72,8 +82,6 @@ jobs:
           ${{ matrix.script }}
           chmod +x ./install_common.sh
           ./install_common.sh
-          mkdir -p /opt/photonvision/
-          echo "${{ github.ref_name }};${{ matrix.name }}" > /opt/photonvision/image-version
 
     - name: Compress built image
       run: |
