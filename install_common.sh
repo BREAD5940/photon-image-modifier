@@ -20,3 +20,55 @@ EOF
 cp -f ./files/issue.txt /etc/issue
 cp -f /etc/issue /etc/issue.net
 sed -i 's/#Banner none/Banner \/etc\/issue.net/g' /etc/ssh/sshd_config
+
+
+# INSTALL REAL
+
+# pyenv deps
+apt update -y 
+apt install -y make build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+    liblzma-dev python3-openssl git
+
+# Install pyenv
+echo "Installing pyenv..."
+curl https://pyenv.run | bash
+
+# Add pyenv to shell startup scripts
+echo -e '\n# Pyenv configuration' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bashrc
+
+# Source bashrc to apply pyenv changes in the current shell
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
+pyenv install 3.12
+pyenv global 3.12
+
+# Confirm installation
+python --version
+
+# real deps
+apt-get --yes install libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
+apt-get --yes install git wget cmake build-essential
+apt-get --yes install libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev at
+
+cd ~
+git clone --depth 1 --branch v2.56.3 https://github.com/IntelRealSense/librealsense.git
+
+cd librealsense
+./scripts/setup_udev_rules.sh
+
+mkdir build && cd build
+cmake ../ -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=true -DPYTHON_EXECUTABLE=$(which python3) -DBUILD_PYTHON_BINDINGS=true -DBUILD_GRAPHICAL_EXAMPLES=true -DCMAKE_BUILD_TYPE=Release
+make -j2
+make install
+
+#done with real
+
+# install ntcore

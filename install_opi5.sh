@@ -54,10 +54,10 @@ cp -f ./OPi5_CIDATA/network-config /boot/network-config
 cp -f ./OPi5_CIDATA/user-data /boot/user-data
 
 # modify photonvision.service to enable big cores
-sed -i 's/# AllowedCPUs=4-7/AllowedCPUs=4-7/g' /lib/systemd/system/photonvision.service
-cp -f /lib/systemd/system/photonvision.service /etc/systemd/system/photonvision.service
-chmod 644 /etc/systemd/system/photonvision.service
-cat /etc/systemd/system/photonvision.service
+# sed -i 's/# AllowedCPUs=4-7/AllowedCPUs=4-7/g' /lib/systemd/system/photonvision.service
+# cp -f /lib/systemd/system/photonvision.service /etc/systemd/system/photonvision.service
+# chmod 644 /etc/systemd/system/photonvision.service
+# cat /etc/systemd/system/photonvision.service
 
 # networkd isn't being used, this causes an unnecessary delay
 systemctl disable systemd-networkd-wait-online.service

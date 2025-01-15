@@ -283,77 +283,77 @@ install_if_missing libsuitesparseconfig5
 
 debug ""
 
-if ! is_version_available "$VERSION" ; then
-  die "PhotonVision v$VERSION is not available" \
-      "See ./install --list-versions for a complete list of available versions."
-fi
+# if ! is_version_available "$VERSION" ; then
+#   die "PhotonVision v$VERSION is not available" \
+#       "See ./install --list-versions for a complete list of available versions."
+# fi
 
-if [ "$VERSION" = "latest" ] ; then
-  RELEASE_URL="https://api.github.com/repos/photonvision/photonvision/releases/latest"
-  debug "Downloading PhotonVision (latest)..."
-else
-  RELEASE_URL="https://api.github.com/repos/photonvision/photonvision/releases/tags/v$VERSION"
-  debug "Downloading PhotonVision (v$VERSION)..."
-fi
+# if [ "$VERSION" = "latest" ] ; then
+#   RELEASE_URL="https://api.github.com/repos/photonvision/photonvision/releases/latest"
+#   debug "Downloading PhotonVision (latest)..."
+# else
+#   RELEASE_URL="https://api.github.com/repos/photonvision/photonvision/releases/tags/v$VERSION"
+#   debug "Downloading PhotonVision (v$VERSION)..."
+# fi
 
-mkdir -p /opt/photonvision
-cd /opt/photonvision || die "Tried to enter /opt/photonvision, but it was not created."
-curl -sk "$RELEASE_URL" |
-    grep "browser_download_url.*$ARCH_NAME.jar" |
-    cut -d : -f 2,3 |
-    tr -d '"' |
-    wget -qi - -O photonvision.jar
-debug "Downloaded PhotonVision."
+# mkdir -p /opt/photonvision
+# cd /opt/photonvision || die "Tried to enter /opt/photonvision, but it was not created."
+# curl -sk "$RELEASE_URL" |
+#     grep "browser_download_url.*$ARCH_NAME.jar" |
+#     cut -d : -f 2,3 |
+#     tr -d '"' |
+#     wget -qi - -O photonvision.jar
+# debug "Downloaded PhotonVision."
 
-debug "Creating the PhotonVision systemd service..."
+# debug "Creating the PhotonVision systemd service..."
 
 # service --status-all doesn't list photonvision on OrangePi use systemctl instead:
-if [[ $(systemctl --quiet is-active photonvision) = "active" ]]; then
-  debug "PhotonVision is already running. Stopping service."
-  systemctl stop photonvision
-  systemctl disable photonvision
-  rm /lib/systemd/system/photonvision.service
-  rm /etc/systemd/system/photonvision.service
-  systemctl daemon-reload
-  systemctl reset-failed
-fi
+# if [[ $(systemctl --quiet is-active photonvision) = "active" ]]; then
+#   debug "PhotonVision is already running. Stopping service."
+#   systemctl stop photonvision
+#   systemctl disable photonvision
+#   rm /lib/systemd/system/photonvision.service
+#   rm /etc/systemd/system/photonvision.service
+#   systemctl daemon-reload
+#   systemctl reset-failed
+# fi
 
-cat > /lib/systemd/system/photonvision.service <<EOF
-[Unit]
-Description=Service that runs PhotonVision
+# cat > /lib/systemd/system/photonvision.service <<EOF
+# [Unit]
+# Description=Service that runs PhotonVision
 
-[Service]
-WorkingDirectory=/opt/photonvision
-# Run photonvision at "nice" -10, which is higher priority than standard
-Nice=-10
-# for non-uniform CPUs, like big.LITTLE, you want to select the big cores
-# look up the right values for your CPU
-# AllowedCPUs=4-7
+# [Service]
+# WorkingDirectory=/opt/photonvision
+# # Run photonvision at "nice" -10, which is higher priority than standard
+# Nice=-10
+# # for non-uniform CPUs, like big.LITTLE, you want to select the big cores
+# # look up the right values for your CPU
+# # AllowedCPUs=4-7
 
-ExecStart=/usr/bin/java -Xmx512m -jar /opt/photonvision/photonvision.jar
-ExecStop=/bin/systemctl kill photonvision
-Type=simple
-Restart=on-failure
-RestartSec=1
+# ExecStart=/usr/bin/java -Xmx512m -jar /opt/photonvision/photonvision.jar
+# ExecStop=/bin/systemctl kill photonvision
+# Type=simple
+# Restart=on-failure
+# RestartSec=1
 
-[Install]
-WantedBy=multi-user.target
-EOF
+# [Install]
+# WantedBy=multi-user.target
+# EOF
 
-if [ "$DISABLE_NETWORKING" = "true" ]; then
-  sed -i "s/photonvision.jar/photonvision.jar -n/" /lib/systemd/system/photonvision.service
-fi
+# if [ "$DISABLE_NETWORKING" = "true" ]; then
+#   sed -i "s/photonvision.jar/photonvision.jar -n/" /lib/systemd/system/photonvision.service
+# fi
 
-if grep -q "RK3588" /proc/cpuinfo; then
-  debug "This has a Rockchip RK3588, enabling big cores"
-  sed -i 's/# AllowedCPUs=4-7/AllowedCPUs=4-7/g' /lib/systemd/system/photonvision.service
-fi
+# if grep -q "RK3588" /proc/cpuinfo; then
+#   debug "This has a Rockchip RK3588, enabling big cores"
+#   sed -i 's/# AllowedCPUs=4-7/AllowedCPUs=4-7/g' /lib/systemd/system/photonvision.service
+# fi
 
-cp /lib/systemd/system/photonvision.service /etc/systemd/system/photonvision.service
-chmod 644 /etc/systemd/system/photonvision.service
-systemctl daemon-reload
-systemctl enable photonvision.service
+# cp /lib/systemd/system/photonvision.service /etc/systemd/system/photonvision.service
+# chmod 644 /etc/systemd/system/photonvision.service
+# systemctl daemon-reload
+# systemctl enable photonvision.service
 
-debug "Created PhotonVision systemd service."
+# debug "Created PhotonVision systemd service."
 
-debug "PhotonVision installation successful."
+# debug "PhotonVision installation successful."
