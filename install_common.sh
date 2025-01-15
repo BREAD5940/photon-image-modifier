@@ -72,3 +72,21 @@ make install
 #done with real
 
 # install ntcore
+cd ~
+git clone --branch 2025.2.1 https://github.com/robotpy/mostrobotpy
+cd mostrobotpy
+
+pip install -r rdev_requirements.txt
+pip install numpy
+
+# get rid of everything after pyntcore
+python -c '(path:=__import__("pathlib").Path("./rdev.toml")).write_text((re:=__import__("re")).match(r"^.*pyntcore.*?(?=\[)",path.read_text(),re.DOTALL)[0])'
+./rdev.sh ci run
+
+# nice to haves
+pip install numpy scipy opencv-python tqdm flask requests pytest
+
+# exploring
+pip install streamlit pandas black pillow
+
+apt install ffmpeg
