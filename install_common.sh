@@ -25,11 +25,13 @@ sed -i 's/#Banner none/Banner \/etc\/issue.net/g' /etc/ssh/sshd_config
 # INSTALL REAL
 
 # pyenv deps
-apt update -y 
-apt install -y make build-essential libssl-dev zlib1g-dev \
+apt-get update -y 
+apt-get install -y make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+    xz-utils tk-dev libffi-dev \
     liblzma-dev python3-openssl git
+
+# apt-get install -y libncurses5-dev libncursesw5-dev 
 
 # Install pyenv
 echo "Installing pyenv..."
@@ -89,4 +91,4 @@ pip install numpy scipy opencv-python tqdm flask requests pytest
 # exploring
 pip install streamlit pandas black pillow
 
-apt install ffmpeg
+apt-get install ffmpeg
