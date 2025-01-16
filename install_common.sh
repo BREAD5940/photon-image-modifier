@@ -25,8 +25,10 @@ sed -i 's/#Banner none/Banner \/etc\/issue.net/g' /etc/ssh/sshd_config
 
 # INSTALL REAL
 
-# pyenv deps
 apt-get update -y 
+apt-get upgrade -y
+
+# pyenv deps
 apt-get install -y make build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
     xz-utils tk-dev libffi-dev \
@@ -38,23 +40,23 @@ apt-get install -y make build-essential libssl-dev zlib1g-dev \
 echo "Installing pyenv..."
 curl https://pyenv.run | bash
 
-# # Add pyenv to shell startup scripts
-# echo -e '\n# Pyenv configuration' >> ~/.bashrc
-# echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-# echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-# echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bashrc
+# Add pyenv to shell startup scripts
+echo -e '\n# Pyenv configuration' >> ~/.bashrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bashrc
 
-# # Source bashrc to apply pyenv changes in the current shell
-# export PYENV_ROOT="$HOME/.pyenv"
-# export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init --path)"
-# eval "$(pyenv init -)"
+# Source bashrc to apply pyenv changes in the current shell
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
 
-# pyenv install 3.11
-# pyenv global 3.11
+pyenv install 3.12
+pyenv global 3.12
 
-# # Confirm installation
-# python --version
+# Confirm installation
+python --version
 
 # real deps
 apt-get --yes install libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
