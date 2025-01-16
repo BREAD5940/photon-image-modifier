@@ -38,23 +38,23 @@ apt-get install -y make build-essential libssl-dev zlib1g-dev \
 echo "Installing pyenv..."
 curl https://pyenv.run | bash
 
-# Add pyenv to shell startup scripts
-echo -e '\n# Pyenv configuration' >> ~/.bashrc
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bashrc
+# # Add pyenv to shell startup scripts
+# echo -e '\n# Pyenv configuration' >> ~/.bashrc
+# echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+# echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+# echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bashrc
 
-# Source bashrc to apply pyenv changes in the current shell
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+# # Source bashrc to apply pyenv changes in the current shell
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init --path)"
+# eval "$(pyenv init -)"
 
-pyenv install 3.11
-pyenv global 3.11
+# pyenv install 3.11
+# pyenv global 3.11
 
-# Confirm installation
-python --version
+# # Confirm installation
+# python --version
 
 # real deps
 apt-get --yes install libssl-dev libusb-1.0-0-dev libudev-dev pkg-config libgtk-3-dev
@@ -69,7 +69,7 @@ cd librealsense
 
 mkdir build && cd build
 cmake ../ -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=true -DPYTHON_EXECUTABLE=$(which python3) -DBUILD_PYTHON_BINDINGS=true -DBUILD_GRAPHICAL_EXAMPLES=true
-make -j2
+make -j1
 make install
 
 #done with real
