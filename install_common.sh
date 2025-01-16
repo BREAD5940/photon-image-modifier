@@ -68,7 +68,7 @@ cd librealsense
 ./scripts/setup_udev_rules.sh
 
 mkdir build && cd build
-cmake ../ -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=true -DPYTHON_EXECUTABLE=$(which python3) -DBUILD_PYTHON_BINDINGS=true -DBUILD_GRAPHICAL_EXAMPLES=true -DCMAKE_BUILD_TYPE=Release
+cmake ../ -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=true -DPYTHON_EXECUTABLE=$(which python3) -DBUILD_PYTHON_BINDINGS=true -DBUILD_GRAPHICAL_EXAMPLES=true
 make -j2
 make install
 
