@@ -24,11 +24,11 @@ before=$(df --output=used / | tail -n1)
 echo "Purging snaps"
 rm -rf /var/lib/snapd/seed/snaps/*
 rm -f /var/lib/snapd/seed/seed.yaml
-apt-get purge --yes --quiet lxd-installer lxd-agent-loader
-apt-get purge --yes --quiet snapd
+apt-get purge --yes --quiet lxd-installer lxd-agent-loader || true
+apt-get purge --yes --quiet snapd || true
 
 # remove bluetooth daemon
-apt-get purge --yes --quiet bluez
+apt-get purge --yes --quiet bluez || true
 
 apt-get --yes --quiet autoremove
 
