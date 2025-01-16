@@ -71,10 +71,15 @@ cd librealsense
 
 mkdir build && cd build
 cmake ../ -DBUILD_EXAMPLES=true -DFORCE_RSUSB_BACKEND=true -DPYTHON_EXECUTABLE=$(which python3) -DBUILD_PYTHON_BINDINGS=true -DBUILD_GRAPHICAL_EXAMPLES=true
-make -j1
+make -j2
 make install
 
-#done with real
+#done with repo, cleanup
+cd ~
+rm -rf librealsense
+apt-get --yes clean
+apt-get --yes autoclean
+apt-get --yes autoremove
 
 # install ntcore
 cd ~
@@ -88,10 +93,15 @@ pip install numpy
 python -c '(path:=__import__("pathlib").Path("./rdev.toml")).write_text((re:=__import__("re")).match(r"^.*pyntcore.*?(?=\[)",path.read_text(),re.DOTALL)[0])'
 ./rdev.sh ci run
 
+#done with repo, cleanup
+pip cache purge
+cd ~
+rm -rf mostrobotpy
+
 # nice to haves
-pip install numpy scipy opencv-python tqdm flask requests pytest
+pip install --no-cache-dir numpy scipy opencv-python tqdm flask requests pytest
 
 # exploring
-pip install streamlit pandas black pillow
+pip install --no-cache-dir streamlit pandas black pillow
 
 apt-get install ffmpeg

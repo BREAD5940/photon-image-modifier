@@ -245,7 +245,8 @@ install_if_missing cpufrequtils
 install_if_missing libatomic1
 install_if_missing v4l-utils
 install_if_missing sqlite3
-install_if_missing openjdk-17-jre-headless
+# no jdk needed
+# install_if_missing openjdk-17-jre-headless
 
 debug "Setting cpufrequtils to performance mode"
 if [ -f /etc/default/cpufrequtils ]; then
@@ -270,18 +271,18 @@ EOF
   debug "network-manager installation complete."
 fi
 
-debug ""
-debug "Installing additional math packages"
-if [[ "$DISTRO" = "Ubuntu" && -z $(apt-cache search libcholmod3) ]]; then
-  debug "Adding jammy to list of apt sources"
-  add-apt-repository -y -S 'deb http://ports.ubuntu.com/ubuntu-ports jammy main universe'
-fi
+# debug ""
+# debug "Installing additional math packages"
+# if [[ "$DISTRO" = "Ubuntu" && -z $(apt-cache search libcholmod3) ]]; then
+#   debug "Adding jammy to list of apt sources"
+#   add-apt-repository -y -S 'deb http://ports.ubuntu.com/ubuntu-ports jammy main universe'
+# fi
 
-install_if_missing libcholmod3
-install_if_missing liblapack3
-install_if_missing libsuitesparseconfig5
+# install_if_missing libcholmod3
+# install_if_missing liblapack3
+# install_if_missing libsuitesparseconfig5
 
-debug ""
+# debug ""
 
 # if ! is_version_available "$VERSION" ; then
 #   die "PhotonVision v$VERSION is not available" \
