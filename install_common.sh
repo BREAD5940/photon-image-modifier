@@ -50,8 +50,8 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
-pyenv install 3.12
-pyenv global 3.12
+pyenv install 3.11
+pyenv global 3.11
 
 # Confirm installation
 python --version
